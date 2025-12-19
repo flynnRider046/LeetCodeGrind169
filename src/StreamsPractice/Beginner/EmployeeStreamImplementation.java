@@ -1,8 +1,6 @@
 package StreamsPractice.Beginner;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EmployeeStreamImplementation {
@@ -12,7 +10,7 @@ public class EmployeeStreamImplementation {
                 new Employee("Rohith","IT",5000),
                 new Employee("Ramesh","IT",6000),
                 new Employee("Siddarth","HR",3000),
-                new Employee("Akhila","HR",6000)
+                new Employee("Akhila","HR",4000)
         );
         //Filter the employees that start with R
         List<Employee> sameName = emList.stream().filter(emp -> emp.name().startsWith("R")).toList();
@@ -38,5 +36,27 @@ public class EmployeeStreamImplementation {
                 .map(emp ->emp.name())
                 .toList();
         System.out.println(descendingSalary);
+        //printing employee belonging to HR
+        List<String> hrList = emList.stream()
+                .filter(emp -> emp.department()=="HR")
+                .map(emp -> emp.name())
+                .toList();
+        //printing the second highest salary in the list of employee
+        Optional<Employee> secondEMP = emList.stream()
+                .sorted(Comparator.comparing(Employee::salary).reversed())
+                .skip(1)
+                .findFirst();
+
+        System.out.println("Employee with second highest salary is"+ secondEMP.get());
+
+        //printing the avg salary of the employees under HR session
+        double avg = emList.stream()
+                        .filter(emp -> emp.department()=="HR")
+                                .mapToDouble(Employee::salary)
+                                        .average()
+                                                .orElse(0.0);
+
+
+        System.out.println(avg);
     }
 }
